@@ -1,47 +1,135 @@
 class Node:
-    def __init__(self, value):
-        self.value = value
-        self.left = None
+    def __init__(self, val=0):
+        self.val = val
+        self.left = None   # Use None instead of 0
         self.right = None
 
+class Tree:
+    def __init__(self):
+        self.root = None   # Initialize as empty
 
-def insert(root, value):
-    if root is None:
-        return Node(value)
+    def insertion(self, val):
+        new_node = Node(val)
 
-    if value < root.value:
-        root.left = insert(root.left, value)
-    else:
-        root.right = insert(root.right, value)
+        # Case 1: Tree is empty
+        if not self.root:
+            self.root = new_node
+            return  # Use return to exit the function
 
-    return root
+        # Case 2: Tree is not empty, use Queue (BFS)
+        q = [self.root]
+
+        while q:
+            curr = q.pop(0)
+
+            # Check Left
+            if curr.left is None:
+                curr.left = new_node
+                return  # STOP once inserted
+            else:
+                q.append(curr.left)
+
+            # Check Right
+            if curr.right is None:
+                curr.right = new_node
+                return  # STOP once inserted
+            else:
+                q.append(curr.right)
+
+    def find(self,val):
+        if self.root == val:
+            return True
+
+        q = [self.root]
+
+        while q:
+            curr = q.pop(0)
+
+            if curr.left == val:
+                return True
+
+            if curr.right:
+                q.append(curr.right)
+            if curr.left:
+                q.append(curr.left)
 
 
-# Optional: inorder traversal to check tree
-def inorder(root):
-    if root:
-        inorder(root.left)
-        print(root.value, end=" ")
-        inorder(root.right)
 
-def preorder(root):
-    if root:
-        print(root.value, end=" ")
-        preorder(root.left)
-        preorder(root.right)
+class Bst:
+    def __init__(self):
+        self.root = None   # Initialize as empty
 
-# Example usage
-# Example usage
-root = None
+    def inorder(self,r):
+        # if r:
+        #     self.inorder(r.left)
+        #     print(r.val)
+        #     self.inorder(r.right)
+        #
 
-values = [55, 1, 22, 12, 11, 2, 50, 30, 70, 20, 40, 60, 80]
+        q = []
+        curr = self.r
 
-for v in values:
-    root = insert(root, v)
+        while q or curr:
+            while curr:
+                q.append(curr)
+                curr = curr.left
 
-print("Inorder traversal: ")
-inorder(root)
+            curr = q.pop()
+            print(curr.val,end=' ')
 
-print()
-print("Preorder traversal: ")
-preorder(root)
+            
+
+
+
+
+    def preorder(self, r):
+        # if r:
+        #     print(r.val, end=' ')
+        #     self.preorder(r.left)  # Call preorder, not inorder
+        #     self.preorder(r.right)
+
+        if not r:
+            return
+
+        q = [self.r]
+
+        while q:
+            curr = q.pop(0)
+            print(curr.val, end=' ')
+
+            if curr.right:
+                q.append(curr.right)
+
+            if curr.left:
+                q.append(curr.left)
+
+
+
+
+
+    def postorder(self, r):
+        # if r:
+        #     self.postorder(r.left)
+        #     self.postorder(r.right)
+        #     print(r.val, end=' ')
+
+        if not r:
+            return
+
+        q = [self.r]
+        q2 = []
+
+        while q:
+            curr = q.pop(0)
+            q2.append(curr.val)
+
+            if curr.right:
+                q.append(curr.right)
+
+            if curr.left:
+                q.append(curr.left)
+
+        return q2[::-1]
+
+
+
