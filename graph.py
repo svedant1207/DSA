@@ -1,3 +1,4 @@
+from collections import deque
 class GraphMatrix:
     def __init__(self, vertices):
         self.v = vertices
@@ -18,13 +19,29 @@ class GraphMatrix:
         for row in self.matrix:
             print(row)
 
+    # traversal
+    def bfs(self, start):
+        visited = [False] * self.v
+        queue = deque([start])
+        visited[start] = True
+        order = []
+
+        while queue:
+            node = queue.popleft()
+            order.append(node)
+
+            for nb in range(self.v):
+                if self.matrix[node][nb] == 1 and not visited[nb]:
+                    visited[nb] = True
+                    queue.append(nb)
+
+        return order
+
 
 # matrix
 g = GraphMatrix(4)
-
 g.add_edge(0,1)
 g.add_edge(0,2)
-g.add_edge(0,3)
 g.add_edge(1,3)
 g.add_edge(1,2)
 g.add_edge(2,3)
@@ -55,6 +72,24 @@ class Graph:
     def __str__(self):
         return '\n'.join(f"{v}:{neighbour}" for v,neighbour in self.list.items())
 
+    # traversal
+
+    def bfs(self, start):
+        visited = {start}
+        queue = deque([start])
+        order = []
+
+        while queue:
+            node = queue.popleft()
+            order.append(node)
+
+            for nb in self.list[node]:
+                if nb not in visited:
+                    visited.add(nb)
+                    queue.append(nb)
+
+        return order
+
 
 #list
 
@@ -78,5 +113,4 @@ g1.neighbours(2)
 g1.neighbours(3)
 g1.p()
 print(g1.__str__())
-
 
