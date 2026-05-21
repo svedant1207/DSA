@@ -37,6 +37,23 @@ class GraphMatrix:
 
         return order
 
+    def dfs(self,start):
+        visited = [False] * self.v
+        stk = [start]
+        visited[start] = True
+        order = []
+
+        while stk:
+            node = stk.pop()
+            order.append(node)
+
+            for nb in range(self.v):
+                if self.matrix[node][nb] == 1 and not visited[nb]:
+                    stk.append(nb)
+
+        return order
+
+
 
 # matrix
 g = GraphMatrix(4)
@@ -90,6 +107,23 @@ class Graph:
 
         return order
 
+    def dfs(self, start):
+        visited = {start}
+        stk = [start]
+        order = []
+
+        while stk:
+            node = stk.pop()
+            order.append(node)
+            if node in visited:
+                continue
+            visited.add(node)
+            order.append(node)
+            for nb in self.list[node]:
+                if nb not in visited:
+                    stk.append(nb)
+
+        return order
 
 #list
 
