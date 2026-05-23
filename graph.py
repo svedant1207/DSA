@@ -146,3 +146,66 @@ g1.neighbours(3)
 g1.p()
 print(g1.__str__())
 
+
+# dijkstra
+import heapq
+
+def dijkstra(graph, start):
+    # graph = { node: [(neighbor, weight), ...] }
+
+    dist = {node: float('inf') for node in graph}
+    dist[start] = 0
+
+    heap = [(0, start)]   # (distance, node)
+
+    while heap:
+        d, node = heapq.heappop(heap)   # always pick closest node
+
+        if d > dist[node]:   # stale entry — skip
+            continue
+
+        for neighbor, weight in graph[node]:
+            new_dist = dist[node] + weight
+            if new_dist < dist[neighbor]:        # found a shorter path
+                dist[neighbor] = new_dist
+                heapq.heappush(heap, (new_dist, neighbor))
+
+    return dist
+
+
+graph = {
+    'A': [('B', 4), ('C', 1)],
+    'B': [('D', 1)],
+    'C': [('B', 2), ('D', 5)],
+    'D': []
+}
+
+print(dijkstra(graph, 'A'))
+# {'A': 0, 'B': 3, 'C': 1, 'D': 4}
+# A→C→B→D costs 4, not A→B→D which costs 5
+
+
+# bellman
+def bellman_ford(graph, vertices, start):
+    # graph = [(u, v, weight), ...]
+
+    dist = {v: float('inf') for v in vertices}
+    dist[start] = 0
+
+    for _ in range(len(vertices) - 1):   # relax all edges V-1 times
+        for u, v, w in graph:
+            if dist[u] + w < dist[v]:
+                dist[v] = dist[u] + w
+
+    # check for negative cycles
+    for u, v, w in graph:
+        if dist[u] + w < dist[v]:
+            return "negative cycle detected"
+
+    return dist
+
+
+edges = [('A','B',4), ('A','C',1), ('C','B',2), ('B','D',1), ('C','D',5)]
+vertices = ['A', 'B', 'C', 'D']
+print(bellman_ford(edges, vertices, 'A'))
+# {'A': 0, 'C': 1, 'B': 3, 'D': 4}
